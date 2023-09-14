@@ -3,26 +3,28 @@
 section .text
 global main
 main:
-    ;write your code here
+    mov rbp, rsp; for correct debugging
     
-    ;메모를 남길 수 있는 기능 = 주석
+    ; 16bit = 2byte = 1 word
+    ; 32bit = 4byte = 2 word = 1 dword (double-word)
+    ; 64bit = 8byte = 4 word = 1 qword (quard-word)
     
-    ;10진수(0 1 2 3 4 5 6 7 8 9)
+    ; 왜 레지스터를 사용해야 하는가?
+    ; 속도가 빠르지만 저장 용량이 매우 작음
+    ; 연산 결과를 임시적으로 저장하는 곳이 레지스터.
+    ; RAX EAX AX AH AL
     
-    ;2진수(0 1) -컴퓨터 친화적, 숫자가 빨리 증가하는 문제.
-    ; 0 1 10 11 100 101 110 111
-    ; 0b0 0b1 0b10 0b11 0b100
+    ; move [register name], cat (데이터의 이동, 오른쪽 -> 이동)
+    ; move reg1, reg2 (레지스터2 -> 레지스터1)
+    mov eax, 0x1234 ; 32bit 레지스터에 1234(16) 삽입
+    mov rbx, 0x12345678
+    mov cl, 0xff ; 0xffffff build하면 에러
     
-    ;16진수(0 1 2 3 4 5 6 7 8 9 A B C D E F)-10진수와 2진수의 절충안
-    ; 0 1 2 3 4 5 6 7 8 9 A B C D E F 10
-    ; 0X00
-    
-    ; 0B 1001 0101 = 0X95 - 4개씩 끊어서 확인 가능해서 2진수와 16진수 오가기 쉽다.
-    
-    PRINT_STRING msg
+    mov al, 0x00 ; 1byte만 가능, eax에서 1234로 삽입 후 8bit까지를 0으로 민다는 뜻. 따라서 0x00이 아니라 0x1234로 저장됨.
+
+    mov rax, rdx ; rdx의 레지스터를 rax에 복사;        
     
     xor eax, eax
     ret
     
-section .data
-    msg db 'hello', 0x00
+;section .data
