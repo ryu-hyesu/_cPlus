@@ -42,6 +42,38 @@ main:
     NEWLINE
     
     ; PRINT_STRING msg ; 공식 어셈블리어 아님. os에서 제공하는 helper 메크로
+    
+    ; 곱하기 연산
+    ; mul reg
+    ; - mul bl -> al * bl
+    ; -- 연산 결과를 ax에 저장
+    ; - mul bx => ax * bx
+    ; -- 연산 결과는 dx(상위 16비트), ax(하위 16비트)에 저장
+    ; - mul ebx -> eax * ebx
+    
+    ; ex) 5 * 8 은?
+    mov ax, 0
+    mov al, 5
+    mov bl, 8
+    mul bl
+    
+    PRINT_DEC 2, ax
+    NEWLINE
+    
+    ; 나누기 연산
+    ; div reg
+    ; - div bl -> ax / bl
+    ; -- 연산 결과는 al(몫) ah(나머지)
+    
+    ; ex) 100/3?
+    mov ax, 100
+    mov bl, 3
+    div bl
+    
+    PRINT_DEC 1, al
+    NEWLINE
+    mov al, ah
+    PRINT_DEC 1, al
  
     xor rax, rax
     ret
