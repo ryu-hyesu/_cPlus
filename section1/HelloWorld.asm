@@ -2,24 +2,51 @@
 
 section .text
 global main
-main:    mov rbp, rsp; for corre ct debugging
+main:    
+
+    mov rbp, rsp; for corre ct debugging
+   
+    ; input 
+    GET_DEC 1, al 
+    GET_DEC 1, num 
     
-    PRINT_STRING msg
+    ; PRINT_DEC 1, al
+    ; NEWLINE
+    ; PRINT_DEC 1, num
     
+    ; 더하기 연산
+    ; add a, b (a = a + b)
+    ; a는 레지스터 or 메모리
+    ; b는 레지스터 or 메모리 or 상수
+    ; -단! a, b 모두 메모리 x
+    
+    add al, 1; 레지스터 + 상수
+    PRINT_DEC 1, al ; 1 + 1 = 2
+    NEWLINE
+    
+    add al, [num]  ; 레지스터 + 메모리, 메모리 이름 그대로 사용하면 주소값과 더해지므로 crush가 생긴다.
+    PRINT_DEC 1, al
+    NEWLINE
+    
+    mov bl, 3 ; 레지스터 + 레지스터
+    add al, bl
+    PRINT_DEC 1, al
+    NEWLINE
+    
+    add [num], byte 1 ; 메모리 + 상수 ; num 자체는 메모리 주소이기 때문에 메모리 크기 정보가 함께 오는 게 아님. 따라서 byte 1로 크기 지정을 해줘야 한다.
+    PRINT_DEC 1, [num]
+    NEWLINE
+    
+    add [num], al ; 메모리 + 레지스터 ; num 자체는 메모리 주소이기 때문에 메모리 크기 정보가 함께 오는 게 아님. 따라서 byte 1로 크기 지정을 해줘야 한다.
+    PRINT_DEC 1, [num]
+    NEWLINE
+    
+    ; PRINT_STRING msg ; 공식 어셈블리어 아님. os에서 제공하는 helper 메크로
+ 
     xor rax, rax
     ret
 
-section .data
-    ; msg db 'Hello World', 0x00 ; 연속적인 문자들 -> 문자열. 문자열의 끝을 알려주기 위해 0x00
-    msg db 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x0 ; 동일한 데이터라고해도 분석의 방법에 따라 표현이 달라질 수 있다.
-
-    a db 17, 0x11, 0x11, 0x11   ; 다수의 데이터 삽입 가능, 1byte 숫자가 연속적으로 들어가 있음.
-    
-    ; 서버에 data 전송 시 엔디안 순서에 따라 저장방법이 달라 버그 발생 가능
-    ; - 리틀 엔디안 : 캐스팅에 유리하다.
-    ; - 빅 엔디안 : 숫자 비교에 유리.
-    
-    b dd 0x12345678 ; 뒤집혀서 저장됨. big-endian & little-endian 
+;section .data
     
 section .bss
-    e resb 10
+    num resb 1
